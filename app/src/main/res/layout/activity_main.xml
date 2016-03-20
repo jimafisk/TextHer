@@ -103,26 +103,33 @@
                 android:textSize="30sp"
                 android:text="Custom"
                 android:textColor="#ff0978"
-                android:textStyle="bold"/>
-            <TextView
+                android:textStyle="bold"
+                android:onClick="onClickCustom"
+                />
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFF"
                 android:textSize="30sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:id="@+id/excuseCustom"
+                />
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="Saved"
                 android:textColor="#ff0978"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:onClick="onClickSaved"
+                />
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:visibility="gone"
+                android:id="@+id/excuseSaved"
                 ></Spinner>
             <RadioButton
                 android:layout_width="match_parent"
@@ -130,7 +137,19 @@
                 android:textSize="30sp"
                 android:text="Auto"
                 android:textColor="#ff0978"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:onClick="onClickAuto"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="WARNING: Auto generated excuses have a high probability of you sleeping on the couch. TextHer does not pay consequential damages for divorce lawyers or marriage counseling"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:visibility="gone"
+                android:id="@+id/excuseAuto"
+                />
         </RadioGroup>
     </LinearLayout>
 
