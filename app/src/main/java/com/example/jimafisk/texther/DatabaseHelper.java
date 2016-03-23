@@ -69,4 +69,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean insertContact(String Name, String Phone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CONTACTS_NAME, Name);
+        contentValues.put(CONTACTS_PHONE, Phone);
+        long result = db.insert(TABLE_CONTACTS, null, contentValues);
+        if(result == -1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
