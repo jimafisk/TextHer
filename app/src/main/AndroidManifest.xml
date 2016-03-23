@@ -21,6 +21,9 @@
         <activity android:name=".ContactModal"
             android:theme="@style/AppTheme.TextHerModal">
         </activity>
+        <activity android:name=".ContactModalDelete"
+            android:theme="@style/AppTheme.TextHerModal">
+        </activity>
     </application>
 
 </manifest>

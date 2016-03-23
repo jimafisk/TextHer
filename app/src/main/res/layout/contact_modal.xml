@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    android:background="#0a2351">
+    android:background="@color/colorPrimaryDark">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,13 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:textColor="#FFF"
+            android:textColor="@color/colorLightest"
             android:text="Name"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:background="#FFF"
+            android:background="@color/colorLightest"
             android:id="@+id/contactName"
             />
     </LinearLayout>
@@ -32,14 +32,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:textColor="#FFF"
+            android:textColor="@color/colorLightest"
             android:text="Phone"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:id="@+id/contactPhone"
-            android:background="#FFF"/>
+            android:background="@color/colorLightest"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

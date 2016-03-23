@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="#1464ff">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,14 +20,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="@color/colorLightest"
             android:textSize="30sp"
             android:text="Location"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:background="#FFF"
+            android:background="@color/colorLightest"
             android:id="@+id/editLocation"
             />
     </LinearLayout>
@@ -38,12 +38,28 @@
         android:orientation="vertical"
         android:layout_marginBottom="20dp"
         >
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:textSize="30sp"
-            android:text="Contact"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorLightest"
+                android:textSize="30sp"
+                android:text="Contact"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                android:id="@+id/contactRequired"
+                android:text="Use the '+' to create a contact"/>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +67,7 @@
             <Spinner
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_weight="5"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:id="@+id/contactSaved"
@@ -62,6 +78,12 @@
                 android:text="+"
                 android:layout_height="match_parent"
                 android:onClick="onClickAddContact"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="-"
+                android:layout_height="match_parent"
+                android:onClick="onClickDeleteContact"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -75,7 +97,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="@color/colorLightest"
             android:textSize="30sp"
             android:text="Meet Time"/>
         <TimePicker
@@ -94,7 +116,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="@color/colorLightest"
             android:textSize="30sp"
             android:text="Excuse"/>
         <RadioGroup
@@ -108,14 +130,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="Custom"
-                android:textColor="#ff0978"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:onClick="onClickCustom"
                 />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFF"
+                android:background="@color/colorLightest"
                 android:textSize="30sp"
                 android:visibility="gone"
                 android:id="@+id/excuseCustom"
@@ -125,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="Saved"
-                android:textColor="#ff0978"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:onClick="onClickSaved"
                 />
@@ -142,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="Auto"
-                android:textColor="#ff0978"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:onClick="onClickAuto"
                 />
@@ -150,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="WARNING: Auto generated excuses have a high probability of you sleeping on the couch. TextHer does not pay consequential damages for divorce lawyers or marriage counseling"
-                android:textColor="#FFF"
+                android:textColor="@color/colorLightest"
                 android:textSize="20sp"
                 android:textStyle="italic"
                 android:visibility="gone"
@@ -171,8 +193,8 @@
             android:text="Set TextHer"
             android:textSize="20sp"
             android:padding="20dp"
-            android:textColor="#FFF"
-            android:background="#ff0978"
+            android:textColor="@color/colorLightest"
+            android:background="@color/colorAccent"
             android:textStyle="bold"
             android:onClick="onClickSaveResponses"
             android:id="@+id/buttonRespones"/>

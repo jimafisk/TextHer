@@ -38,37 +38,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if(result.getCount() == 0) {
 
         }
-        /*
-        StringBuffer buffer = new StringBuffer();
-        while (result.moveToNext()) {
-            buffer.append(result.getString(0));
-        }
-        */
-        //ArrayList<String> allContacts = new ArrayList<String>();
+        // Create empty list
         List<String> allContacts = new ArrayList<String>();
+        // Add Contacts from db to list
         for(result.moveToFirst(); !result.isAfterLast(); result.moveToNext()) {
             // The Cursor is now set to the right position
             allContacts.add(result.getString(0));
         }
-
         // Spinner element
         Spinner spinner = (Spinner) findViewById(R.id.contactSaved);
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        /*
-        categories.add("Automobile");
-        categories.add("Business Services");
-        categories.add("Computers");
-        categories.add("Education");
-        categories.add("Personal");
-        categories.add("Travel");
-        */
-        for (int i = 0; i < allContacts.size(); i++) {
-            categories.add(allContacts.get(i));
+        if (allContacts.size() < 1) {
+            TextView contactRequired = (TextView) findViewById(R.id.contactRequired);
+            contactRequired.setVisibility(View.VISIBLE);
+        } else {
+            for (int i = 0; i < allContacts.size(); i++) {
+                categories.add(allContacts.get(i));
+            }
         }
-
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         // Drop down layout style - list view with radio button
@@ -125,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
     public void onClickAddContact (View view) {
         startActivity(new Intent(MainActivity.this, ContactModal.class));
+    }
+
+    public void onClickDeleteContact (View view) {
+        startActivity(new Intent(MainActivity.this, ContactModalDelete.class));
     }
 
     @Override

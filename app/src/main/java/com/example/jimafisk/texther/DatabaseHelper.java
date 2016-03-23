@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public Cursor getContacts() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor result = db.rawQuery("select " + CONTACTS_NAME + " from " + TABLE_CONTACTS, null);
+        Cursor result = db.rawQuery("select " + CONTACTS_NAME + ", " + CONTACTS_ID + " from " + TABLE_CONTACTS, null);
         return result;
     }
 
