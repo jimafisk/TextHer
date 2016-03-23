@@ -1,7 +1,9 @@
 package com.example.jimafisk.texther;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,9 +20,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     DatabaseHelper textHerDb;
 
@@ -27,6 +33,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textHerDb = new DatabaseHelper(this);
+
+        Cursor result = textHerDb.getContacts();
+        if(result.getCount() == 0) {
+
+        }
+        /*
+        StringBuffer buffer = new StringBuffer();
+        while (result.moveToNext()) {
+            buffer.append(result.getString(0));
+        }
+        */
+        //ArrayList<String> allContacts = new ArrayList<String>();
+        List<String> allContacts = new ArrayList<String>();
+        for(result.moveToFirst(); !result.isAfterLast(); result.moveToNext()) {
+            // The Cursor is now set to the right position
+            allContacts.add(result.getString(0));
+        }
+
+        // Spinner element
+        Spinner spinner = (Spinner) findViewById(R.id.contactSaved);
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        /*
+        categories.add("Automobile");
+        categories.add("Business Services");
+        categories.add("Computers");
+        categories.add("Education");
+        categories.add("Personal");
+        categories.add("Travel");
+        */
+        for (int i = 0; i < allContacts.size(); i++) {
+            categories.add(allContacts.get(i));
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
     }
 
     public void onClickCustom (View view) {
@@ -77,5 +125,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClickAddContact (View view) {
         startActivity(new Intent(MainActivity.this, ContactModal.class));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

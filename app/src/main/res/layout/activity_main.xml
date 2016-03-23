@@ -54,6 +54,7 @@
                 android:layout_weight="6"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
+                android:id="@+id/contactSaved"
                 />
             <Button
                 android:layout_width="0dp"

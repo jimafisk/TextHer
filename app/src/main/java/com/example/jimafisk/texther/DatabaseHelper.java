@@ -2,6 +2,7 @@ package com.example.jimafisk.texther;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -80,6 +81,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
+    }
+    public Cursor getContacts() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select " + CONTACTS_NAME + " from " + TABLE_CONTACTS, null);
+        return result;
     }
 
 }
