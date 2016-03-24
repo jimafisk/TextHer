@@ -1,4 +1,4 @@
-package com.example.jimafisk.texther;
+package com.example.jimafisk.textcuse;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

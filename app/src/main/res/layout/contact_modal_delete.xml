@@ -4,14 +4,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    android:background="#0a2351"
+    android:background="@color/colorPrimaryDark"
     >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:textColor="#FFF"
-            android:text="Contacts"/>
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:text="Remove Contacts"/>
     <ScrollView
         android:layout_height="0dp"
         android:layout_width="match_parent"

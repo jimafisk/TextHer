@@ -1,4 +1,4 @@
-package com.example.jimafisk.texther;
+package com.example.jimafisk.textcuse;
 
 import org.junit.Test;
 

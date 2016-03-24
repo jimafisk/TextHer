@@ -1,7 +1,8 @@
-package com.example.jimafisk.texther;
+package com.example.jimafisk.textcuse;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -24,9 +25,13 @@ public class ContactModal extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+        getWindow().setLayout((int) (width*.8), (int) (height*.65));
 
         textHerDb = new DatabaseHelper(this);
+
+        // Add Font Awesome
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
     }
 
     public void onClickSaveContact (View view) {
