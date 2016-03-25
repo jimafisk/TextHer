@@ -3,9 +3,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="@color/colorPrimaryDark"
+    android:background="@android:color/transparent"
+    android:id="@+id/icons_container"
+    android:clipChildren="false"
     >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:clipChildren="false"
+        >
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/fa_times_circle"
+            android:textColor="@color/colorLightest"
+            android:background="@android:color/transparent"
+            android:textSize="30sp"
+            android:layout_marginRight="-9dp"
+            android:layout_marginTop="-10dp"
+            android:layout_alignParentRight="true"
+            android:onClick="buttonCloseModal"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,5 +62,8 @@
             android:textSize="20sp"
             android:padding="20dp"
             android:onClick="onClickDeleteContact"/>
+
+            </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

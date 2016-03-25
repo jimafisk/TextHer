@@ -19,5 +19,16 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+    <style name="Picker.Black" parent="android:Theme.Holo.Light">
+        <item name="android:editTextColor">@color/colorLightest</item>
+    </style>
+    <style name="AppTheme.FormItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:background">@drawable/form_border_top</item>
+    </style>
 
 </resources>

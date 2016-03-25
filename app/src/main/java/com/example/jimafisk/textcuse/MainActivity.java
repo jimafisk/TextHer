@@ -1,5 +1,8 @@
 package com.example.jimafisk.textcuse;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -16,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -63,9 +67,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Add Font Awesome
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
-        //Button buttonAddContact = (Button) findViewById(R.id.buttonAddContact);
-        //Button buttonDeleteContact = (Button) findViewById(R.id.buttonDeleteContact);
-        //buttonDeleteContact.setTypeface(FontManager.getTypeface(FontManager.FONTAWESOME));
+
+        TimePicker tp = (TimePicker) findViewById(R.id.timePickerMeetTime);
+
 
     }
 
@@ -95,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
     public void onClickSaveResponses (View view) {
         EditText Location = (EditText) findViewById(R.id.editLocation);
-        String Contact = "Test_Contact";
+        //String Contact = "Test_Contact";
+        Spinner contactSpinner = (Spinner) findViewById(R.id.contactSaved);
+        String Contact = contactSpinner.getSelectedItem().toString();
         TimePicker MeetTime = (TimePicker) findViewById(R.id.timePickerMeetTime);
         String Excuse = "Test_Excuse";
         Button buttonResponses;

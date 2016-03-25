@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jimafisk on 3/20/16.
@@ -81,6 +82,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
+    }
+    public boolean removeContacts(List<Integer> contactDeleteIDs) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //ContentValues contentValues = new ContentValues();
+        Integer numRowsDeleted = 0;
+        for (int i = 0; i < contactDeleteIDs.size(); i++) {
+            //contentValues.put(CONTACTS_ID, (Integer) contactDeleteIDs.get(i));
+            String currentID = String.valueOf(contactDeleteIDs.get(i));
+            numRowsDeleted += db.delete(TABLE_CONTACTS, "ID = ?", new String[] {currentID});
+        }
+        if (numRowsDeleted > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
     public Cursor getContacts() {
         SQLiteDatabase db = this.getWritableDatabase();

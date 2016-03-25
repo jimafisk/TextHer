@@ -25,7 +25,7 @@ public class ContactModal extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*.8), (int) (height*.65));
+        getWindow().setLayout((int) (width*.9), (int) (height*.65));
 
         textHerDb = new DatabaseHelper(this);
 
@@ -50,5 +50,8 @@ public class ContactModal extends Activity {
         } else {
             Toast.makeText(ContactModal.this, "TextHer could not save " + Name.getText().toString() + " at this time.", Toast.LENGTH_LONG).show();
         }
+    }
+    public void buttonCloseModal (View view) {
+        startActivity(new Intent(ContactModal.this, MainActivity.class));
     }
 }

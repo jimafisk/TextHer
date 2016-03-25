@@ -3,6 +3,7 @@ package com.example.jimafisk.textcuse;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -30,7 +31,7 @@ public class ContactModalDelete extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*.8), (int) (height*.65));
+        getWindow().setLayout((int) (width*.9), (int) (height*.65));
 
         textHerDb = new DatabaseHelper(this);
 
@@ -60,23 +61,42 @@ public class ContactModalDelete extends Activity {
                 ll.addView(cb);
             }
         }
+
+        // Add Font Awesome
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
+
     }
 
     public void onClickDeleteContact (View view) {
 
-        EditText Name = (EditText) findViewById(R.id.contactName);
-        EditText Phone = (EditText) findViewById(R.id.contactPhone);
+        LinearLayout container = (LinearLayout)findViewById(R.id.checkboxGroup);
+        List<Integer> contactDeleteIDs = new ArrayList<Integer>();;
+        for (int i = 0; i < container.getChildCount(); i++){
+            // Assign each child to a general View variable
+            View v = container.getChildAt(i);
+            // Check if child is actually a CheckBox
+            if (v instanceof CheckBox) {
+                CheckBox cb = (CheckBox) v;
+                if (cb.isChecked()) {
+                    contactDeleteIDs.add(cb.getId());
+                }
+            }
+        }
 
-        boolean isInserted = textHerDb.insertContact(
-                Name.getText().toString(),
-                Phone.getText().toString()
-        );
+
+        boolean isInserted = textHerDb.removeContacts(contactDeleteIDs);
 
         if (isInserted == true) {
-            Toast.makeText(ContactModalDelete.this, "Contact has been saved!", Toast.LENGTH_LONG).show();
+            Toast.makeText(ContactModalDelete.this, "Contacts have been deleted!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(ContactModalDelete.this, MainActivity.class));
         } else {
-            Toast.makeText(ContactModalDelete.this, "TextHer could not save " + Name.getText().toString() + " at this time.", Toast.LENGTH_LONG).show();
+            Toast.makeText(ContactModalDelete.this, "No contacts to delete", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    public void buttonCloseModal (View view) {
+        startActivity(new Intent(ContactModalDelete.this, MainActivity.class));
     }
 }
