@@ -48,6 +48,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         // The Cursor is now set to the right position
                         destination = result.getString(0);
                     }
+                    String duration = null;
 
                     try {
                         String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=" + URLEncoder.encode(origin, "UTF-8") + "&destination=" + URLEncoder.encode(destination, "UTF-8") + "&sensor=false";
@@ -179,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         // Grab first leg
                         JSONObject leg = legs.getJSONObject(0);
                         JSONObject durationObject = leg.getJSONObject("duration");
-                        String duration = durationObject.getString("text");
+                        //String duration = durationObject.getString("text");
+                        duration = durationObject.getString("text");
                         Toast.makeText(MainActivity.this, "It will take you " + duration + " to get to " + destination + " from " + origin, Toast.LENGTH_LONG).show();
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -188,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
 
                     Calendar cal = Calendar.getInstance();
                     long startTime = System.currentTimeMillis(); // Process start time
@@ -202,14 +204,60 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     // Incrementing the calendar time based on elapsed time
                     cal.setTimeInMillis(cal.getTime().getTime() + elapsedTime);
                     Toast.makeText(MainActivity.this, "Current time is: " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
-                    /*
-                    Long currentTime = System.currentTimeMillis();
-                    long timeMinutes = TimeUnit.MILLISECONDS.toMinutes(currentTime);
-                    long timeHours = TimeUnit.MILLISECONDS.toHours(currentTime);
-                    Toast.makeText(MainActivity.this, "Current time is: " + currentTime, Toast.LENGTH_LONG).show();
-                    Toast.makeText(MainActivity.this, "Current time is: " + timeHours + ":" + timeMinutes, Toast.LENGTH_LONG).show();
-                    */
 
+                    Cursor resultTime = textHerDb.getLastMeetTime();
+                    String meetTime = new String();
+                    for (resultTime.moveToFirst(); !resultTime.isAfterLast(); resultTime.moveToNext()) {
+                        // The Cursor is now set to the right position
+                        meetTime = resultTime.getString(0);
+                    }
+                    Toast.makeText(MainActivity.this, "Meet time is: " + meetTime, Toast.LENGTH_LONG).show();
+
+
+                    //String test = "15 hour 10 min";
+                    String test = duration;
+                    String[] testArray = test.split(" ");
+                    //long additionalDuration = 0;
+                    int durDays = 0;
+                    int durHours = 0;
+                    int durMinutes = 0;
+                    for(int i = 0; i < testArray.length; i+=2) {
+                        switch(testArray[i+1].toLowerCase()) {
+                            case "day":
+                            case "days":
+                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60 * 24);
+                                durDays = Integer.parseInt(testArray[i]);
+                                break;
+                            case "hour":
+                            case "hours":
+                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60);
+                                durHours = Integer.parseInt(testArray[i]);
+                                break;
+                            case "minute":
+                            case "minutes":
+                            case "min":
+                            case "mins":
+                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000*60);
+                                durMinutes = Integer.parseInt(testArray[i]);
+                                break;
+                            default:
+                                System.out.println("Could not parse unit: \""+testArray[i+1]+"\"");
+                        }
+                    }
+                    //Date futureDate = new Date(new Date().getTime() + additionalDuration);
+                    //Toast.makeText(MainActivity.this, "Futuredate: " + futureDate, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this, "Futuredate: " + additionalDuration, Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Travel = " + durDays + " days, " + durHours + " hours, " + durMinutes + " minutes", Toast.LENGTH_LONG).show();
+
+                    //Integer x = Integer.valueOf(durMinutes);
+                    //Integer y = Integer.valueOf(durHours);
+                    //cal.add(Calendar.MINUTE, x);
+                    //cal.add(Calendar.HOUR_OF_DAY, y)
+                    cal.add(Calendar.MINUTE, durMinutes);
+                    cal.add(Calendar.HOUR_OF_DAY, durHours);
+                    //cal.add(Calendar.MINUTE, 10);
+                    //cal.add(Calendar.HOUR_OF_DAY, 1);
+                    Toast.makeText(MainActivity.this, "Current time + travel is: " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
 
                 }
             }
