@@ -15,12 +15,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.audiofx.BassBoost;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -267,10 +269,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     if (meetHours < cal.get(Calendar.HOUR_OF_DAY)) {
                         // You're going to be late, so send text
                         Toast.makeText(MainActivity.this, "You're clearly late... send text!", Toast.LENGTH_LONG).show();
+
                     } else if (meetHours == cal.get(Calendar.HOUR_OF_DAY)) {
                         // hours are the same so check mins
                         if (meetMinutes <= cal.get(Calendar.MINUTE)) {
                             Toast.makeText(MainActivity.this, "You're late... texting", Toast.LENGTH_LONG).show();
+                            sendSMS("617-231-1234", "Sorry I'm running late! Apparently you're not supposed to ");
+                            /*
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + "413-233-7273"));
+                            intent.putExtra("sms_body", message);
+                            startActivity(intent);
+                            */
                         } else {
                             Toast.makeText(MainActivity.this, "You're ok for a few more mins", Toast.LENGTH_LONG).show();
                         }
@@ -413,5 +422,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    // Helper method to send text messages
+    private void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }
 
 }
