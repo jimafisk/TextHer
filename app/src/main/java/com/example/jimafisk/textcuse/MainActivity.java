@@ -215,33 +215,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                     //String test = "15 hour 10 min";
-                    String test = duration;
-                    String[] testArray = test.split(" ");
+                    String splitStr = duration;
+                    String[] splitDur = splitStr.split(" ");
                     //long additionalDuration = 0;
                     int durDays = 0;
                     int durHours = 0;
                     int durMinutes = 0;
-                    for(int i = 0; i < testArray.length; i+=2) {
-                        switch(testArray[i+1].toLowerCase()) {
+                    for(int i = 0; i < splitDur.length; i+=2) {
+                        switch(splitDur[i+1].toLowerCase()) {
                             case "day":
                             case "days":
                                 //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60 * 24);
-                                durDays = Integer.parseInt(testArray[i]);
+                                durDays = Integer.parseInt(splitDur[i]);
                                 break;
                             case "hour":
                             case "hours":
                                 //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60);
-                                durHours = Integer.parseInt(testArray[i]);
+                                durHours = Integer.parseInt(splitDur[i]);
                                 break;
                             case "minute":
                             case "minutes":
                             case "min":
                             case "mins":
                                 //additionalDuration += Integer.parseInt(testArray[i]) * (1000*60);
-                                durMinutes = Integer.parseInt(testArray[i]);
+                                durMinutes = Integer.parseInt(splitDur[i]);
                                 break;
                             default:
-                                System.out.println("Could not parse unit: \""+testArray[i+1]+"\"");
+                                System.out.println("Could not parse unit: \""+splitDur[i+1]+"\"");
                         }
                     }
                     //Date futureDate = new Date(new Date().getTime() + additionalDuration);
@@ -258,6 +258,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     //cal.add(Calendar.MINUTE, 10);
                     //cal.add(Calendar.HOUR_OF_DAY, 1);
                     Toast.makeText(MainActivity.this, "Current time + travel is: " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+
+                    String[] splitMeet = meetTime.split(":");
+                    int meetHours = 0;
+                    int meetMinutes = 0;
+                    meetHours = Integer.parseInt(splitMeet[0]);
+                    meetMinutes = Integer.parseInt(splitMeet[1]);
+                    if (meetHours < cal.get(Calendar.HOUR_OF_DAY)) {
+                        // You're going to be late, so send text
+                        Toast.makeText(MainActivity.this, "You're clearly late... send text!", Toast.LENGTH_LONG).show();
+                    } else if (meetHours == cal.get(Calendar.HOUR_OF_DAY)) {
+                        // hours are the same so check mins
+                        if (meetMinutes <= cal.get(Calendar.MINUTE)) {
+                            Toast.makeText(MainActivity.this, "You're late... texting", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "You're ok for a few more mins", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "You're ok for now", Toast.LENGTH_LONG).show();
+                    }
 
                 }
             }
