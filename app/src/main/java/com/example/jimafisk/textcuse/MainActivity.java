@@ -52,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                //testTextView.append("\n hey!!!! " + location.getLatitude() + " " + location.getLongitude());
                 Toast.makeText(MainActivity.this, "You are currently located at: " + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_LONG).show();
 
 
@@ -128,12 +128,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
 
-                    //String origin = new String();
-                    //origin = location.getLatitude() + ", " + location.getLongitude();
-                    //String origin = location.getLatitude() + ", " + location.getLongitude(); //"The Hatch Boston";
-                    //String origin = "42.3446671,-71.1045462";
-
-
+                    // Get street address from latitude and longitude coordinates
                     Geocoder geocoder;
                     List<Address> addresses;
                     String address = null, city = null, state = null, country = null, postalCode = null, knownName = null;
@@ -146,34 +141,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         country = addresses.get(0).getCountryName();
                         postalCode = addresses.get(0).getPostalCode();
                         knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                        /*
-                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        String city = addresses.get(0).getLocality();
-                        String state = addresses.get(0).getAdminArea();
-                        String country = addresses.get(0).getCountryName();
-                        String postalCode = addresses.get(0).getPostalCode();
-                        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                        */
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-
-
                     String origin = address + city + state + postalCode;
-                    //String origin = "The Hatch Boston";
-                    //Toast.makeText(MainActivity.this, "Origin string: " + origin, Toast.LENGTH_LONG).show();
                     Cursor result = textHerDb.getLastLocation();
                     String destination = new String();
                     for (result.moveToFirst(); !result.isAfterLast(); result.moveToNext()) {
                         // The Cursor is now set to the right position
                         destination = result.getString(0);
                     }
-                    //String destination = "Worthington, MA";
 
                     try {
                         String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=" + URLEncoder.encode(origin, "UTF-8") + "&destination=" + URLEncoder.encode(destination, "UTF-8") + "&sensor=false";
-                        //String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + URLEncoder.encode(destination, "UTF-8") + "&sensor=false";
                         StringBuilder response = new StringBuilder();
 
                         URL url = new URL(stringUrl);
@@ -199,16 +180,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         JSONObject leg = legs.getJSONObject(0);
                         JSONObject durationObject = leg.getJSONObject("duration");
                         String duration = durationObject.getString("text");
-                        Toast.makeText(MainActivity.this, "It will take you " + duration + " to get to " + destination, Toast.LENGTH_LONG).show();
-                        /*
-                        JSONObject jsonObject = new JSONObject(responseText);
-                        JSONArray routeObject = jsonObject.getJSONArray("routes");
-                        JSONArray legsObject = routeObject.getJSONArray(2);
-                        JSONObject durationObject = legsObject.getJSONObject(1);
-                        String duration = durationObject.getString("text");
-                        Toast.makeText(MainActivity.this, "It will take you " + duration + " mins to get to your destination", Toast.LENGTH_LONG).show();
-                        System.out.println(duration);
-                        */
+                        Toast.makeText(MainActivity.this, "It will take you " + duration + " to get to " + destination + " from " + origin, Toast.LENGTH_LONG).show();
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -216,18 +188,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
+
+                    Calendar cal = Calendar.getInstance();
+                    long startTime = System.currentTimeMillis(); // Process start time
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Calculating elapse time
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    // Incrementing the calendar time based on elapsed time
+                    cal.setTimeInMillis(cal.getTime().getTime() + elapsedTime);
+                    Toast.makeText(MainActivity.this, "Current time is: " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+                    /*
+                    Long currentTime = System.currentTimeMillis();
+                    long timeMinutes = TimeUnit.MILLISECONDS.toMinutes(currentTime);
+                    long timeHours = TimeUnit.MILLISECONDS.toHours(currentTime);
+                    Toast.makeText(MainActivity.this, "Current time is: " + currentTime, Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Current time is: " + timeHours + ":" + timeMinutes, Toast.LENGTH_LONG).show();
+                    */
+
+
                 }
-
-
-
-
-                /*
-                Location meetLocation = new Location("point A");
-                meetLocation.setLatitude(79.422006);
-                meetLocation.setLongitude(-89.084095);
-                float distance = location.distanceTo(meetLocation);
-                Toast.makeText(MainActivity.this, "You are " + distance + " meters away from where you need to be", Toast.LENGTH_LONG).show();
-                */
             }
 
             @Override
