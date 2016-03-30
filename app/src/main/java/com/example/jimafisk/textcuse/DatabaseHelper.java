@@ -115,7 +115,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor result = db.rawQuery("select " + RESPONSES_COL_TIME + " from " + TABLE_RESPONSES + " order by " + RESPONSES_COL_ID + " DESC LIMIT 1", null);
         return result;
     }
-    public Cursor getLastPhoneNumber(Integer ContactID) {
+    public Cursor getLastContactID() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select " + RESPONSES_COL_CONTACT_ID + " from " + TABLE_RESPONSES + " order by " + RESPONSES_COL_ID + " DESC LIMIT 1", null);
+        return result;
+    }
+    public Cursor getLastPhoneNumber(String ContactID) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select " + CONTACTS_PHONE + " from " + TABLE_CONTACTS + " where " + CONTACTS_ID + " = " + ContactID, null);
         return result;

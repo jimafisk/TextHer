@@ -266,20 +266,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     int meetMinutes = 0;
                     meetHours = Integer.parseInt(splitMeet[0]);
                     meetMinutes = Integer.parseInt(splitMeet[1]);
+
+
+                    Cursor resultContactID = textHerDb.getLastContactID();
+                    String lastContactID = new String();
+                    for (resultContactID.moveToFirst(); !resultContactID.isAfterLast(); resultContactID.moveToNext()) {
+                        // The Cursor is now set to the right position
+                        lastContactID = resultContactID.getString(0);
+                    }
+                    Cursor resultPhone = textHerDb.getLastPhoneNumber(lastContactID);
+                    String lastPhoneNumber = new String();
+                    for (resultPhone.moveToFirst(); !resultPhone.isAfterLast(); resultPhone.moveToNext()) {
+                        // The Cursor is now set to the right position
+                        lastPhoneNumber = resultPhone.getString(0);
+                    }
+
+
                     if (meetHours < cal.get(Calendar.HOUR_OF_DAY)) {
                         // You're going to be late, so send text
                         Toast.makeText(MainActivity.this, "You're clearly late... send text!", Toast.LENGTH_LONG).show();
-
+                        sendSMS(lastPhoneNumber, "Sorry I'm going to be REALLY late!");
                     } else if (meetHours == cal.get(Calendar.HOUR_OF_DAY)) {
                         // hours are the same so check mins
                         if (meetMinutes <= cal.get(Calendar.MINUTE)) {
                             Toast.makeText(MainActivity.this, "You're late... texting", Toast.LENGTH_LONG).show();
-                            sendSMS("617-231-1234", "Sorry I'm running late! Apparently you're not supposed to ");
-                            /*
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + "413-233-7273"));
-                            intent.putExtra("sms_body", message);
-                            startActivity(intent);
-                            */
+                            //sendSMS("617-231-1234", "Sorry I'm running late! Apparently you're not supposed to ");
+                            sendSMS(lastPhoneNumber, "Sorry I'm running late! I'm just finishing up with a client!");
                         } else {
                             Toast.makeText(MainActivity.this, "You're ok for a few more mins", Toast.LENGTH_LONG).show();
                         }
