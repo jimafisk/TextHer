@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -43,10 +45,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -117,14 +121,59 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 //testTextView.append("\n hey!!!! " + location.getLatitude() + " " + location.getLongitude());
                 Toast.makeText(MainActivity.this, "You are currently located at: " + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_LONG).show();
 
+
                 System.out.println("Has not run try yet");
                 // Run Async
                 if (android.os.Build.VERSION.SDK_INT > 9) {
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
 
+                    //String origin = new String();
+                    //origin = location.getLatitude() + ", " + location.getLongitude();
+                    //String origin = location.getLatitude() + ", " + location.getLongitude(); //"The Hatch Boston";
+                    //String origin = "42.3446671,-71.1045462";
+
+
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    String address = null, city = null, state = null, country = null, postalCode = null, knownName = null;
+                    geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     try {
-                        String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&sensor=false";
+                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        city = addresses.get(0).getLocality();
+                        state = addresses.get(0).getAdminArea();
+                        country = addresses.get(0).getCountryName();
+                        postalCode = addresses.get(0).getPostalCode();
+                        knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                        /*
+                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String postalCode = addresses.get(0).getPostalCode();
+                        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                        */
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    String origin = address + city + state + postalCode;
+                    //String origin = "The Hatch Boston";
+                    //Toast.makeText(MainActivity.this, "Origin string: " + origin, Toast.LENGTH_LONG).show();
+                    Cursor result = textHerDb.getLastLocation();
+                    String destination = new String();
+                    for (result.moveToFirst(); !result.isAfterLast(); result.moveToNext()) {
+                        // The Cursor is now set to the right position
+                        destination = result.getString(0);
+                    }
+                    //String destination = "Worthington, MA";
+
+                    try {
+                        String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=" + URLEncoder.encode(origin, "UTF-8") + "&destination=" + URLEncoder.encode(destination, "UTF-8") + "&sensor=false";
+                        //String stringUrl = "http://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + URLEncoder.encode(destination, "UTF-8") + "&sensor=false";
                         StringBuilder response = new StringBuilder();
 
                         URL url = new URL(stringUrl);
@@ -150,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         JSONObject leg = legs.getJSONObject(0);
                         JSONObject durationObject = leg.getJSONObject("duration");
                         String duration = durationObject.getString("text");
-                        Toast.makeText(MainActivity.this, "It will take you " + duration + " to get to your destination", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "It will take you " + duration + " to get to " + destination, Toast.LENGTH_LONG).show();
                         /*
                         JSONObject jsonObject = new JSONObject(responseText);
                         JSONArray routeObject = jsonObject.getJSONArray("routes");

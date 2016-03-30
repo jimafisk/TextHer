@@ -105,4 +105,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getLastLocation() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select " + RESPONSES_COL_LOCATION + " from " + TABLE_RESPONSES + " order by " + RESPONSES_COL_ID + " DESC LIMIT 1", null);
+        return result;
+    }
+
 }
