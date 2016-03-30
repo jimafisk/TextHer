@@ -215,11 +215,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                     Toast.makeText(MainActivity.this, "Meet time is: " + meetTime, Toast.LENGTH_LONG).show();
 
-
-                    //String test = "15 hour 10 min";
                     String splitStr = duration;
                     String[] splitDur = splitStr.split(" ");
-                    //long additionalDuration = 0;
                     int durDays = 0;
                     int durHours = 0;
                     int durMinutes = 0;
@@ -227,38 +224,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         switch(splitDur[i+1].toLowerCase()) {
                             case "day":
                             case "days":
-                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60 * 24);
                                 durDays = Integer.parseInt(splitDur[i]);
                                 break;
                             case "hour":
                             case "hours":
-                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000 * 60 * 60);
                                 durHours = Integer.parseInt(splitDur[i]);
                                 break;
                             case "minute":
                             case "minutes":
                             case "min":
                             case "mins":
-                                //additionalDuration += Integer.parseInt(testArray[i]) * (1000*60);
                                 durMinutes = Integer.parseInt(splitDur[i]);
                                 break;
                             default:
                                 System.out.println("Could not parse unit: \""+splitDur[i+1]+"\"");
                         }
                     }
-                    //Date futureDate = new Date(new Date().getTime() + additionalDuration);
-                    //Toast.makeText(MainActivity.this, "Futuredate: " + futureDate, Toast.LENGTH_LONG).show();
-                    //Toast.makeText(MainActivity.this, "Futuredate: " + additionalDuration, Toast.LENGTH_LONG).show();
+
                     Toast.makeText(MainActivity.this, "Travel = " + durDays + " days, " + durHours + " hours, " + durMinutes + " minutes", Toast.LENGTH_LONG).show();
 
-                    //Integer x = Integer.valueOf(durMinutes);
-                    //Integer y = Integer.valueOf(durHours);
-                    //cal.add(Calendar.MINUTE, x);
-                    //cal.add(Calendar.HOUR_OF_DAY, y)
                     cal.add(Calendar.MINUTE, durMinutes);
                     cal.add(Calendar.HOUR_OF_DAY, durHours);
-                    //cal.add(Calendar.MINUTE, 10);
-                    //cal.add(Calendar.HOUR_OF_DAY, 1);
                     Toast.makeText(MainActivity.this, "Current time + travel is: " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
 
                     String[] splitMeet = meetTime.split(":");
@@ -280,18 +266,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         // The Cursor is now set to the right position
                         lastPhoneNumber = resultPhone.getString(0);
                     }
+                    Cursor resultExcuse = textHerDb.getLastExcuse();
+                    String lastExcuse = new String();
+                    for (resultExcuse.moveToFirst(); !resultExcuse.isAfterLast(); resultExcuse.moveToNext()) {
+                        // The Cursor is now set to the right position
+                        lastExcuse = resultExcuse.getString(0);
+                    }
 
 
                     if (meetHours < cal.get(Calendar.HOUR_OF_DAY)) {
                         // You're going to be late, so send text
                         Toast.makeText(MainActivity.this, "You're clearly late... send text!", Toast.LENGTH_LONG).show();
-                        sendSMS(lastPhoneNumber, "Sorry I'm going to be REALLY late!");
+                        //sendSMS(lastPhoneNumber, "Sorry I'm going to be REALLY late!");
+                        sendSMS(lastPhoneNumber, lastExcuse);
                     } else if (meetHours == cal.get(Calendar.HOUR_OF_DAY)) {
                         // hours are the same so check mins
                         if (meetMinutes <= cal.get(Calendar.MINUTE)) {
                             Toast.makeText(MainActivity.this, "You're late... texting", Toast.LENGTH_LONG).show();
                             //sendSMS("617-231-1234", "Sorry I'm running late! Apparently you're not supposed to ");
-                            sendSMS(lastPhoneNumber, "Sorry I'm running late! I'm just finishing up with a client!");
+                            //sendSMS(lastPhoneNumber, "Sorry I'm running late! I'm just finishing up with a client!");
+                            sendSMS(lastPhoneNumber, lastExcuse);
                         } else {
                             Toast.makeText(MainActivity.this, "You're ok for a few more mins", Toast.LENGTH_LONG).show();
                         }
@@ -384,19 +378,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int contactID = Integer.valueOf((String) tag);
         // Get user selected meeting time
         TimePicker MeetTime = (TimePicker) findViewById(R.id.timePickerMeetTime);
-        String Excuse = "Test_Excuse";
+        EditText Excuse = (EditText) findViewById(R.id.excuseCustom);
+        //String Excuse = "Test_Excuse";
         //Button buttonResponses;
         boolean isInserted = textHerDb.insertResponse(
                 Location.getText().toString(),
                 contactID,
                 MeetTime.getHour() + ":" + MeetTime.getMinute(),
-                Excuse
+                Excuse.getText().toString()
+                //Excuse
         );
 
         if (isInserted == true) {
-            Toast.makeText(MainActivity.this, "TextHer has been set!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Textcuse has been set!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(MainActivity.this, "Your TextHer Could NOT be saved at this time!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Your Textcuse Could NOT be saved at this time!", Toast.LENGTH_LONG).show();
         }
 
     }
